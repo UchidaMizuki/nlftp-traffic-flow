@@ -3,6 +3,12 @@
 
 国土数値情報 交通流動量データを整形するためのRコードです．
 
+``` r
+library(targets)
+library(tidyverse)
+library(sf)
+```
+
 ## 利用上の注意点
 
 - データ利用にあたっては事前に[国土数値情報ダウンロードサービスコンテンツ利用規約](https://nlftp.mlit.go.jp/ksj/other/agreement.html)を確認してください．
@@ -28,31 +34,20 @@
 #### 発生・集中量: `person_trip_occurred_concentrated`
 
 ``` r
-library(sf)
-targets::tar_read(person_trip_occurred_concentrated)
+tar_load(person_trip_occurred_concentrated)
+glimpse(person_trip_occurred_concentrated)
 ```
 
-    Simple feature collection with 104892 features and 7 fields
-    Geometry type: MULTIPOLYGON
-    Dimension:     XY
-    Bounding box:  xmin: 134.2527 ymin: 33.43311 xmax: 140.873 ymax: 36.46507
-    Geodetic CRS:  JGD2000
-    # A tibble: 104,892 × 8
-       urban_area_name data_creation_year zone_code transportation purpose
-       <fct>                        <int> <chr>     <fct>          <fct>  
-     1 syuto                         2010 0010      鉄道           出勤   
-     2 syuto                         2010 0010      鉄道           登校   
-     3 syuto                         2010 0010      鉄道           自由   
-     4 syuto                         2010 0010      鉄道           業務   
-     5 syuto                         2010 0010      鉄道           帰宅   
-     6 syuto                         2010 0010      鉄道           合計   
-     7 syuto                         2010 0010      バス           出勤   
-     8 syuto                         2010 0010      バス           登校   
-     9 syuto                         2010 0010      バス           自由   
-    10 syuto                         2010 0010      バス           業務   
-    # ℹ 104,882 more rows
-    # ℹ 3 more variables: traffic_volume_occurred <int>,
-    #   traffic_volume_concentrated <int>, geometry <MULTIPOLYGON [°]>
+    Rows: 104,892
+    Columns: 8
+    $ urban_area_name             <fct> syuto, syuto, syuto, syuto, syuto, syuto, …
+    $ data_creation_year          <int> 2010, 2010, 2010, 2010, 2010, 2010, 2010, …
+    $ zone_code                   <chr> "0010", "0010", "0010", "0010", "0010", "0…
+    $ transportation              <fct> 鉄道, 鉄道, 鉄道, 鉄道, 鉄道, 鉄道, バス, …
+    $ purpose                     <fct> 出勤, 登校, 自由, 業務, 帰宅, 合計, 出勤, …
+    $ traffic_volume_occurred     <int> 46, 0, 46594, 46037, 244456, 337133, 0, 0,…
+    $ traffic_volume_concentrated <int> 238126, 690, 51541, 60934, 167, 351458, 26…
+    $ geometry                    <MULTIPOLYGON [°]> MULTIPOLYGON (((139.7526 35..…
 
 ### パーソントリップOD量
 
@@ -66,35 +61,27 @@ targets::tar_read(person_trip_occurred_concentrated)
 #### OD量: `person_trip_od_amount`
 
 ``` r
-targets::tar_read(person_trip_od_amount)
+tar_load(person_trip_od_amount)
+glimpse(person_trip_od_amount)
 ```
 
-    # A tibble: 212 × 5
-       urban_area_name data_creation_year transportation purpose od_amount          
-       <fct>                        <int> <fct>          <fct>   <list>             
-     1 syuto                         2010 鉄道           出勤    <table [600 × 600]>
-     2 syuto                         2010 鉄道           登校    <table [600 × 600]>
-     3 syuto                         2010 鉄道           自由    <table [600 × 600]>
-     4 syuto                         2010 鉄道           業務    <table [600 × 600]>
-     5 syuto                         2010 鉄道           帰宅    <table [600 × 600]>
-     6 syuto                         2010 鉄道           合計    <table [600 × 600]>
-     7 syuto                         2010 バス           出勤    <table [600 × 600]>
-     8 syuto                         2010 バス           登校    <table [600 × 600]>
-     9 syuto                         2010 バス           自由    <table [600 × 600]>
-    10 syuto                         2010 バス           業務    <table [600 × 600]>
-    # ℹ 202 more rows
+    Rows: 212
+    Columns: 5
+    $ urban_area_name    <fct> syuto, syuto, syuto, syuto, syuto, syuto, syuto, sy…
+    $ data_creation_year <int> 2010, 2010, 2010, 2010, 2010, 2010, 2010, 2010, 201…
+    $ transportation     <fct> 鉄道, 鉄道, 鉄道, 鉄道, 鉄道, 鉄道, バス, バス, バ…
+    $ purpose            <fct> 出勤, 登校, 自由, 業務, 帰宅, 合計, 出勤, 登校, 自…
+    $ od_amount          <list> <<table[600 x 600]>>, <<table[600 x 600]>>, <<tabl…
 
 #### 代表地点間距離: `distance_person_trip_od_amount`
 
 ``` r
-targets::tar_read(distance_person_trip_od_amount)
+tar_load(distance_person_trip_od_amount)
+glimpse(distance_person_trip_od_amount)
 ```
 
-    # A tibble: 5 × 3
-      urban_area_name data_creation_year distance           
-      <fct>                        <int> <list>             
-    1 syuto                         2010 <table [600 × 600]>
-    2 chubu                         2010 <table [445 × 445]>
-    3 kinki                         2010 <table [302 × 302]>
-    4 kinki                         2012 <table [432 × 432]>
-    5 chubu                         2013 <table [594 × 594]>
+    Rows: 5
+    Columns: 3
+    $ urban_area_name    <fct> syuto, chubu, kinki, kinki, chubu
+    $ data_creation_year <int> 2010, 2010, 2010, 2012, 2013
+    $ distance           <list> <<table[600 x 600]>>, <<table[445 x 445]>>, <<table…
