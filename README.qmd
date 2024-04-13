@@ -13,15 +13,31 @@ editor: visual
 ## 利用方法
 
 1.  本リポジトリをクローンしてください．
-2.  RStudioで本リポジトリを開いてください．
+2.  RStudioで本プロジェクトを開いてください．
 3.  `targets::tar_make()`を実行してください．
 
 ## データ一覧
 
+### パーソントリップ発生・集中量
+
+-   出典: 国土数値情報 パーソントリップ発生・集中量データ (<https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-S05-a-2013.html>)
+
+-   発生・集中量のうち**目的別の合計値**については，国土数値情報 パーソントリップ発生・集中量データ (<https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-S05-a-2013.html>) を加工して作成
+
+#### 発生・集中量: `person_trip_occurred_concentrated`
+
+```{r}
+#| message: false
+
+library(sf)
+targets::tar_read(person_trip_occurred_concentrated)
+
+```
+
 ### パーソントリップOD量
 
--   出典: 国土数値情報 交通流動量 パーソントリップＯＤ量データ (https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-S05-b-2013.html)
--   OD量のうち**目的別の合計値**，および**代表地点間距離**については，国土数値情報 交通流動量 パーソントリップＯＤ量データ ( https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-S05-b-2013.html) を加工して作成
+-   出典: 国土数値情報 交通流動量 パーソントリップＯＤ量データ (<https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-S05-b-2013.html>)
+-   OD量のうち**目的別の合計値**，および**代表地点間距離**については，国土数値情報 交通流動量 パーソントリップＯＤ量データ (<https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-S05-b-2013.html>) を加工して作成
 
 #### OD量: `person_trip_od_amount`
 
