@@ -14,7 +14,7 @@ get_shape_property_table2_person_trip_od_amount <- function(shape_property_table
     mutate(
       file_name = file_name |>
         map(\(file_name) {
-          if (str_detect(file_name, "S05-b-10_SYUTO-\\d+-g_PersonTripODAmount.shp")) {
+          if (str_detect(file_name, "S05-b-10_SYUTO-\\d+-g_PersonTripODAmount\\.shp")) {
             file_name |>
               str_replace("SYUTO",
                           c("SYUTO", "CHUBU", "KINKI"))
@@ -24,24 +24,6 @@ get_shape_property_table2_person_trip_od_amount <- function(shape_property_table
         })
     ) |>
     unnest(file_name)
-}
-
-download_person_trip_od_amount <- function(url) {
-  exdir <- "data-raw/person-trip-od-amount"
-  dir_create(exdir)
-
-  exdir <- path(exdir,
-                path_file(url) |>
-                  path_ext_remove())
-  dir_create(exdir)
-
-  zipfile <- file_temp()
-  curl::curl_download(url, zipfile)
-  zip::unzip(zipfile,
-             exdir = exdir)
-
-  dir_ls(exdir,
-         recurse = TRUE)
 }
 
 read_person_trip_od_amount <- function(file_person_trip_od_amount,
