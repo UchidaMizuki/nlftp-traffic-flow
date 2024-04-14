@@ -122,7 +122,7 @@ get_distance_person_trip_od_amount <- function(point_person_trip_od_amount) {
           distance <- st_distance(data)
           dimnames(distance) <- list(orig_zone_code = data$zone_code,
                                      dest_zone_code = data$zone_code)
-          as.table(distance)
+          distance
         }),
       .keep = "unused"
     )
