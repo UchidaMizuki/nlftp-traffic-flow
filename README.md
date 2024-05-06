@@ -83,7 +83,9 @@ glimpse(distance_person_trip_od_amount)
 ```
 
     Rows: 5
-    Columns: 3
+    Columns: 5
     $ urban_area_name    <fct> syuto, chubu, kinki, kinki, chubu
     $ data_creation_year <int> 2010, 2010, 2010, 2012, 2013
+    $ urban_area_code    <chr> "1", "3", "2", "2", "3"
+    $ survey_year        <int> 2008, 2001, 2000, 2010, 2011
     $ distance           <list> <<units[600 x 600]>>, <<units[445 x 445]>>, <<units…

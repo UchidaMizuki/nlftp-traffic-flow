@@ -115,7 +115,7 @@ get_person_trip_od_amount <- function(data_person_trip_od_amount, point_person_t
 
 get_distance_person_trip_od_amount <- function(point_person_trip_od_amount) {
   point_person_trip_od_amount |>
-    nest(.by = c(urban_area_name, data_creation_year)) |>
+    nest(.by = c(urban_area_name, data_creation_year, urban_area_code, survey_year)) |>
     mutate(
       distance = data |>
         map(\(data) {
