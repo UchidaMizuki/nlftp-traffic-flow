@@ -76,15 +76,15 @@ get_point_person_trip_od_amount <- function(data_person_trip_od_amount) {
 
 get_person_trip_od_amount <- function(data_person_trip_od_amount, point_person_trip_od_amount) {
   point <- point_person_trip_od_amount |>
-    nest(.by = c(urban_area_name, data_creation_year),
+    nest(.by = c(urban_area_name, data_creation_year, urban_area_code, survey_year),
          .key = "point")
 
   person_trip_od_amount <- data_person_trip_od_amount |>
     st_drop_geometry() |>
-    select(urban_area_name, data_creation_year, orig_zone_code, dest_zone_code, transportation, purpose, od_amount) |>
-    nest(.by = c(urban_area_name, data_creation_year, transportation, purpose)) |>
+    select(urban_area_name, data_creation_year, urban_area_code, survey_year, orig_zone_code, dest_zone_code, transportation, purpose, od_amount) |>
+    nest(.by = c(urban_area_name, data_creation_year, urban_area_code, survey_year, transportation, purpose)) |>
     left_join(point,
-              by = join_by(urban_area_name, data_creation_year)) |>
+              by = join_by(urban_area_name, data_creation_year, urban_area_code, survey_year)) |>
     mutate(
       od_amount = list(data, point) |>
         pmap(\(data, point) {
@@ -104,13 +104,13 @@ get_person_trip_od_amount <- function(data_person_trip_od_amount, point_person_t
                        reduce(`+`,
                               .init = 0) |>
                        list()),
-              .by = c(urban_area_name, data_creation_year, purpose)) |>
+              .by = c(urban_area_name, data_creation_year, urban_area_code, survey_year, purpose)) |>
     add_column(transportation = as_factor("合計"),
                .before = "purpose")
 
   bind_rows(person_trip_od_amount,
             person_trip_od_amount_by_purpose) |>
-    arrange(urban_area_name, data_creation_year, transportation, purpose)
+    arrange(urban_area_name, data_creation_year, urban_area_code, survey_year, transportation, purpose)
 }
 
 get_distance_person_trip_od_amount <- function(point_person_trip_od_amount) {
